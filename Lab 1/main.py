@@ -3,12 +3,13 @@ import time
 import json
 import random
 import geocoder
-g = geocoder.ip('me')
+
 BROKER_ADDRESS = "demo.thingsboard.io"
 PORT = 1883
 THINGS_BOARD_ACCESS_TOKEN = "3ZndOZls9AUGTR2xj4qH"
 
 print("Xin chào ThingsBoard")
+
 
 def subscribed(client, userdata, mid, granted_qos):
     print("Subscribed...")
@@ -45,19 +46,21 @@ client.on_message = recv_message
 temp = 30
 humi = 50
 light = 100
+counter = 0
+
+g = geocoder.arcgis('Vietnam', maxRows=100)
 
 latitude, longitude = g.latlng
-
-counter = 0
 
 
 while True:
     collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude}
 
-    latitude, longitude = g.latlng
+    latitude, longitude = g[counter].latlng
     temp = random.randint(20, 100)
     humi = random.randint(40, 100)
     light = random.randint(90, 100)
+    counter = random.randint(0, len(g)-1)
 
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(4)
