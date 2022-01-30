@@ -48,19 +48,22 @@ humi = 50
 light = 100
 counter = 0
 
-g = geocoder.arcgis('Vietnam', maxRows=100)
+provinces = ['Đà Lạt', 'Điện Biên Phủ', 'Huế', 'Nha Trang', 'Phan Thiết', 'Cà Mau', 'Bến Tre', 'Hội An', 'Vũng Tàu', 'Quảng Ngãi']
+locations = [geocoder.arcgis(province, maxRows=1) for province in provinces]
 
-latitude, longitude = g.latlng
+latitude, longitude = locations[0].latlng
+location_name = locations[0].address
 
 
 while True:
-    collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude}
+    collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude, 'location_name': location_name}
 
-    latitude, longitude = g[counter].latlng
+    latitude, longitude = locations[counter].latlng
+    location_name = locations[counter].address
     temp = random.randint(20, 100)
     humi = random.randint(40, 100)
     light = random.randint(90, 100)
-    counter = random.randint(0, len(g)-1)
+    counter = random.randint(0, len(locations)-1)
 
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(4)
