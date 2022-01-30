@@ -38,15 +38,19 @@ client.connect(BROKER_ADDRESS, 1883)
 client.loop_start()
 client.on_subscribe = subscribed
 client.on_message = recv_message
+
 temp = 30
 humi = 50
-light_intesity = 100
+light = 100
+longitude = 106.7
+latitude = 10.6
 counter = 0
 
+
 while True:
-    collect_data = {'temperature': temp, 'humidity': humi, 'light':light_intesity}
+    collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude}
     temp += 1
     humi += 1
-    light_intesity += 1
+    light += 1
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(5)
