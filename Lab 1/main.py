@@ -56,8 +56,8 @@ while True:
 
     latitude, longitude = g.latlng
     temp = random.randint(20, 100)
-    humi += random.randint(40, 100)
-    light += random.randint(90, 100)
+    humi = random.randint(40, 100)
+    light = random.randint(90, 100)
 
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
     time.sleep(4)
