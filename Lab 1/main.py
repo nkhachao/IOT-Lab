@@ -1,11 +1,13 @@
-print("Xin chào ThingsBoard")
 import paho.mqtt.client as mqttclient
 import time
 import json
+import geocoder
+g = geocoder.ip('me')
 BROKER_ADDRESS = "demo.thingsboard.io"
 PORT = 1883
 THINGS_BOARD_ACCESS_TOKEN = "3ZndOZls9AUGTR2xj4qH"
 
+print("Xin chào ThingsBoard")
 
 def subscribed(client, userdata, mid, granted_qos):
     print("Subscribed...")
@@ -42,12 +44,15 @@ client.on_message = recv_message
 temp = 30
 humi = 50
 light = 100
-longitude = 106.7
-latitude = 10.6
+
+latitude, longitude = g.latlng
+
 counter = 0
 
 
 while True:
+    latitude, longitude = g.latlng
+
     collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude}
     temp += 1
     humi += 1
