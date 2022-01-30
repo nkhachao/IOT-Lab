@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqttclient
 import time
 import json
+import random
 import geocoder
 g = geocoder.ip('me')
 BROKER_ADDRESS = "demo.thingsboard.io"
@@ -51,11 +52,12 @@ counter = 0
 
 
 while True:
-    latitude, longitude = g.latlng
-
     collect_data = {'temperature': temp, 'humidity': humi, 'light':light, 'longitude':longitude, 'latitude':latitude}
-    temp += 1
-    humi += 1
-    light += 1
+
+    latitude, longitude = g.latlng
+    temp = random.randint(20, 100)
+    humi += random.randint(40, 100)
+    light += random.randint(90, 100)
+
     client.publish('v1/devices/me/telemetry', json.dumps(collect_data), 1)
-    time.sleep(5)
+    time.sleep(4)
